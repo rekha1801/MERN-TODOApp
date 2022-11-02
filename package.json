@@ -1,0 +1,22 @@
+{
+  "name": "mern-todoapp",
+  "version": "1.0.0",
+  "description": "### TODO-App",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rekha1801/MERN-TODOApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rekha1801/MERN-TODOApp/issues"
+  },
+  "homepage": "https://github.com/rekha1801/MERN-TODOApp#readme"
+}
