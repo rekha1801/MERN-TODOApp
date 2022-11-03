@@ -1,0 +1,14 @@
+.link {
+  text-decoration: none;
+  color: white;
+}
+.list {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: steelblue;
+  padding: 20px;
+  width: 70vw;
+  margin: auto;
+}

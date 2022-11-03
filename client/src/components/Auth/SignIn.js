@@ -2,22 +2,29 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function SignIn() {
-  const [userData, setUserData] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [message, setMessage] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setUserData({
-      email: e.target.email.value,
-      password: e.target.password.value,
-    });
+    try {
+      e.preventDefault();
+      const res = await axios.post(`${process.env.REACT_APP_BE_URL}/signin`, {
+        email,
+        password,
+      });
 
-    axios
-      .post(`${process.env.REACT_APP_BE_URL}/auth/signin`, userData)
-      .then((res) => console.log("Response from backend" + res))
-      .catch((err) => console.log(err));
+      if (res.data) {
+        setMessage(true);
+        window.location.replace("/dashboard");
+      }
+    } catch (err) {
+      if (err.response.status === 400) {
+        setError(true);
+      }
+    }
   };
   return (
     <div>
@@ -25,7 +32,13 @@ export default function SignIn() {
       <form action="post" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email </label>
-          <input type="email" id="email" placeholder="Email" name="email" />
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div>
           <label htmlFor="password">Password</label>
@@ -34,12 +47,15 @@ export default function SignIn() {
             id="password"
             placeholder="Password"
             name="password"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div>
           <button type="submit">SignIn</button>
         </div>
       </form>
+      {message && "Login Successfull!!!"}
+      {error && "Invalid Credentials"}
     </div>
   );
 }
