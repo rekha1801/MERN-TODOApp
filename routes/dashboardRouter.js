@@ -1,6 +1,10 @@
 import express from "express";
-import { dashboardController } from "../controllers/dashboardController.js";
+import {
+  createTodoList,
+  getTodoList,
+} from "../controllers/dashboardController.js";
 
 const router = express.Router();
-router.post("/create-todo", dashboardController);
+router.post("/create-todo", createTodoList);
+router.get("/my-tasks", getTodoList);
 export default router;

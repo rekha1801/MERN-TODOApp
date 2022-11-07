@@ -5,8 +5,19 @@ import SignUp from "./components/Auth/SignUp.js";
 import SignIn from "./components/Auth/SignIn.js";
 import Dashboard from "./components/Dashboard/Dashboard.js";
 import NavBar from "./components/NavBar/NavBar.js";
+import { useState } from "react";
 
 function App() {
+  const [authorised, setAuthorised] = useState(false);
+
+  //never chage the status value like !authorised directly.
+  //use callback function inside setAuthorised assigning oldstate to !oldState
+  const authHandler = () => {
+    setAuthorised((oldState) => !oldState);
+  };
+
+  //const logoutHandler = () => setAuthorised(false);
+
   return (
     <div
       className="App"
@@ -20,13 +31,19 @@ function App() {
       <h1>TODO-App</h1>
       <BrowserRouter>
         <div>
-          <NavBar />
+          <NavBar authorised={authorised} authHandler={authHandler} />
         </div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard authorised={authorised} />}
+          />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route
+            path="/signin"
+            element={<SignIn authHandler={authHandler} />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

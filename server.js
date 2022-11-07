@@ -4,6 +4,7 @@ import cors from "cors";
 import authRouter from "./routes/authRouter.js";
 import dashboardRouter from "./routes/dashboardRouter.js";
 import mongoose from "mongoose";
+import { verifyToken } from "./middlewares/verifyToken.js";
 
 const app = express();
 dotenv.config();
@@ -14,17 +15,17 @@ app.use(express.json({ extended: true, limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use("/", authRouter);
-app.use("/", dashboardRouter);
+app.use("/dashboard", verifyToken, dashboardRouter);
 
 //Global error handler middleware
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    error: {
-      msg: error.message,
-    },
-  });
-});
+// app.use((error, req, res, next) => {
+//   res.status(error.status || 500);
+//   res.json({
+//     error: {
+//       msg: error.message,
+//     },
+//   });
+// });
 
 mongoose
   .connect(process.env.CONNECTION_URL)

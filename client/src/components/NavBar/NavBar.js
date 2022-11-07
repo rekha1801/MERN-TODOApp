@@ -1,8 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
-export default function NavBar() {
+export default function NavBar({ authorised, authHandler }) {
+  const navigate = useNavigate();
+
+  const manageAuthorisation = () => {
+    if (authorised) {
+      navigate("/");
+      authHandler();
+    } else navigate("/signin");
+  };
+
   return (
     <div>
       <ul className="list">
@@ -11,22 +20,30 @@ export default function NavBar() {
             HOME
           </Link>
         </li>
+        {authorised ? (
+          <li>
+            <Link to="/dashboard" className="link">
+              DASHBOARD
+            </Link>
+          </li>
+        ) : null}
+        {!authorised ? (
+          <>
+            <li>
+              <Link to="/signup" className="link">
+                SIGNUP
+              </Link>
+            </li>
 
-        <li>
-          <Link to="/signup" className="link">
-            SIGNUP
-          </Link>
-        </li>
-        <li>
-          <Link to="/signin" className="link">
-            SIGNIN
-          </Link>
-        </li>
-        <li>
-          <Link to="/dashboard" className="link">
-            DASHBOARD
-          </Link>
-        </li>
+            <li>
+              <Link to="/signin" className="link">
+                SIGNIN
+              </Link>
+            </li>
+          </>
+        ) : (
+          <button onClick={manageAuthorisation}>LOGOUT</button>
+        )}
       </ul>
     </div>
   );

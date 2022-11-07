@@ -1,21 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../App.css";
 
 export default function SignUp() {
-  const [userData, setUserData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [message, setMessage] = useState(false);
   const [error, setError] = useState(false);
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -25,12 +19,14 @@ export default function SignUp() {
         password,
       });
       if (res.data) {
-        localStorage.setItem("profile", JSON.stringify(res.data));
+        console.log(res.data);
+        localStorage.setItem("toDoToken", JSON.stringify(res.data.token));
         setMessage(true);
-        window.location.replace("/signin");
+        navigate("/signin");
       }
     } catch (err) {
-      if (err.response.status === 401) {
+      console.log(err);
+      if (err.response.data.status === "failed") {
         setError(true);
       }
     }
@@ -45,9 +41,9 @@ export default function SignUp() {
           <input
             type="text"
             id="username"
-            placeholder="UserName"
+            placeholder="Enter your UserName"
             name="username"
-            onChange={(e) => setUsername(e.target.value)}
+            onBlur={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
@@ -55,9 +51,9 @@ export default function SignUp() {
           <input
             type="email"
             id="email"
-            placeholder="Email"
+            placeholder="Enter your Email"
             name="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onBlur={(e) => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -65,9 +61,9 @@ export default function SignUp() {
           <input
             type="password"
             id="password"
-            placeholder="Password"
+            placeholder="Enter your Password"
             name="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onBlur={(e) => setPassword(e.target.value)}
           />
         </div>
         <div>

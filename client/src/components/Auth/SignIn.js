@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function SignIn() {
+export default function SignIn(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [message, setMessage] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     try {
@@ -18,17 +20,19 @@ export default function SignIn() {
 
       if (res.data) {
         setMessage(true);
-        window.location.replace("/dashboard");
+        localStorage.setItem("toDoToken", JSON.stringify(res.data.token));
+        props.authHandler();
+        navigate("/dashboard");
       }
     } catch (err) {
-      if (err.response.status === 400) {
-        setError(true);
-      }
+      console.log(err);
+      setError(err.response.data.message);
     }
   };
+
   return (
     <div>
-      <h3>LogIn</h3>
+      <h3>Log In</h3>
       <form action="post" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email </label>
@@ -37,7 +41,8 @@ export default function SignIn() {
             id="email"
             placeholder="Email"
             name="email"
-            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="none"
+            onBlur={(e) => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -47,15 +52,16 @@ export default function SignIn() {
             id="password"
             placeholder="Password"
             name="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onBlur={(e) => setPassword(e.target.value)}
           />
         </div>
         <div>
           <button type="submit">SignIn</button>
+          <hr />
+          {error ? { error } : null}
         </div>
       </form>
       {message && "Login Successfull!!!"}
-      {error && "Invalid Credentials"}
     </div>
   );
 }
